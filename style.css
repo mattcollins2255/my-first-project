@@ -1,22 +1,31 @@
+/* Colour palette: change these and the whole app follows.
+   Light: warm paper with a deep teal accent and coral highlights. */
 :root {
-  --bg: #f6f7f9;
-  --card: #ffffff;
-  --text: #1d2330;
-  --muted: #667085;
-  --border: #e4e7ec;
-  --accent: #5b5bd6;
-  --danger: #d92d20;
+  --bg: #f3efe6;
+  --card: #fffdf8;
+  --text: #24302e;
+  --muted: #6b716b;
+  --border: #e5ded0;
+  --accent: #0f766e;
+  --on-accent: #ffffff; /* text drawn on top of the accent colour */
+  --accent-soft: #d5ece8;
+  --highlight: #f08a5d;
+  --danger: #c2410c;
 }
 
+/* Dark: forest night with a bright mint accent. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #111318;
-    --card: #1b1e25;
-    --text: #e8eaf0;
-    --muted: #98a2b3;
-    --border: #2c303a;
-    --accent: #8b8bf5;
-    --danger: #f97066;
+    --bg: #0e1513;
+    --card: #16211e;
+    --text: #e4ece8;
+    --muted: #93a39d;
+    --border: #26342f;
+    --accent: #2dd4bf;
+    --on-accent: #062a25; /* dark text, because white on mint is hard to read */
+    --accent-soft: #123a34;
+    --highlight: #fdba74;
+    --danger: #fb923c;
   }
 }
 
@@ -42,11 +51,22 @@ main {
   main { margin: 0; border-radius: 0; border-width: 0; min-height: 100vh; padding: 16px; }
 }
 
-h1 { margin: 0; font-size: 1.5rem; }
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  display: inline-block;
+  border-bottom: 3px solid var(--highlight);
+  padding-bottom: 2px;
+}
 .subtitle { margin: 4px 0 20px; color: var(--muted); }
 
 .progress { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-#progress-bar { height: 100%; width: 0; background: var(--accent); transition: width 0.3s; }
+#progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--highlight));
+  transition: width 0.3s;
+}
 #summary { margin: 6px 0 16px; font-size: 0.9rem; color: var(--muted); }
 
 form { display: flex; gap: 8px; }
@@ -70,20 +90,30 @@ button {
   background: var(--card);
   color: var(--text);
 }
-form button { background: var(--accent); border-color: var(--accent); color: #fff; }
+form button { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+form button:hover { filter: brightness(1.1); }
+#new-todo:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .filters { display: flex; gap: 6px; margin: 16px 0 8px; }
 .filters button { padding: 4px 12px; font-size: 0.9rem; }
-.filters button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.filters button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
+  font-weight: 600;
+}
 
 ul { list-style: none; padding: 0; margin: 0; }
 li {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 0;
+  padding: 10px 8px;
   border-bottom: 1px solid var(--border);
+  border-radius: 6px;
+  transition: background 0.15s;
 }
+li:hover { background: var(--accent-soft); }
 li label { flex: 1; display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
 li input[type="checkbox"] { margin-top: 5px; accent-color: var(--accent); }
 li.done span { text-decoration: line-through; color: var(--muted); }
