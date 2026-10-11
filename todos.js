@@ -54,3 +54,16 @@ export function progress(todos) {
 export function starterTodos() {
   return STARTER_TODOS.map(createTodo);
 }
+
+export function exportTodos(todos, date = new Date()) {
+  const data = {
+    exportedAt: date.toISOString(),
+    progress: progress(todos),
+    todos: todos.map(({ text, done }) => ({ text, done })),
+  };
+  return JSON.stringify(data, null, 2);
+}
+
+export function exportFilename(date = new Date()) {
+  return `todo-list-${date.toISOString().slice(0, 10)}.json`;
+}

@@ -8,3 +8,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Personal exported to-do lists (kept local, never pushed to the public repo)
+exportedlists/

@@ -9,6 +9,8 @@ import {
   progress,
   starterTodos,
   STARTER_TODOS,
+  exportTodos,
+  exportFilename,
 } from "./todos.js";
 
 test("addTodo adds a trimmed, not-done item", () => {
@@ -77,4 +79,21 @@ test("starterTodos returns the learning checklist, all not done", () => {
   const todos = starterTodos();
   assert.equal(todos.length, STARTER_TODOS.length);
   assert.ok(todos.every((t) => t.done === false));
+});
+
+test("exportTodos produces readable JSON with text, done, and progress", () => {
+  let todos = addTodo(addTodo([], "a"), "b");
+  todos = toggleTodo(todos, todos[0].id);
+  const date = new Date("2026-10-11T12:00:00Z");
+  const data = JSON.parse(exportTodos(todos, date));
+  assert.equal(data.exportedAt, "2026-10-11T12:00:00.000Z");
+  assert.deepEqual(data.progress, { done: 1, total: 2, percent: 50 });
+  assert.deepEqual(data.todos, [
+    { text: "a", done: true },
+    { text: "b", done: false },
+  ]);
+});
+
+test("exportFilename includes the date", () => {
+  assert.equal(exportFilename(new Date("2026-10-11T12:00:00Z")), "todo-list-2026-10-11.json");
 });

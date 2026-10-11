@@ -7,6 +7,8 @@ import {
   filterTodos,
   progress,
   starterTodos,
+  exportTodos,
+  exportFilename,
 } from "./todos.js";
 
 const STORAGE_KEY = "agentic-ai-todos";
@@ -40,6 +42,7 @@ const bar = document.querySelector("#progress-bar");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const clearButton = document.querySelector("#clear-completed");
 const resetButton = document.querySelector("#reset");
+const exportButton = document.querySelector("#export");
 
 function update(newTodos) {
   todos = newTodos;
@@ -100,6 +103,17 @@ clearButton.addEventListener("click", () => update(clearCompleted(todos)));
 
 resetButton.addEventListener("click", () => {
   if (confirm("Replace your list with the starter checklist?")) update(starterTodos());
+});
+
+// Download the list as a JSON file by pointing a temporary link at an in-memory file.
+exportButton.addEventListener("click", () => {
+  const blob = new Blob([exportTodos(todos)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = exportFilename();
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000); // free the memory once the download starts
 });
 
 render();
