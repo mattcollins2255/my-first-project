@@ -67,3 +67,25 @@ export function exportTodos(todos, date = new Date()) {
 export function exportFilename(date = new Date()) {
   return `todo-list-${date.toISOString().slice(0, 10)}.json`;
 }
+
+// Reads a file made by exportTodos and returns a fresh list of todos.
+// Throws an Error with a friendly message if the file isn't a valid export.
+export function importTodos(jsonText) {
+  let data;
+  try {
+    data = JSON.parse(jsonText);
+  } catch {
+    throw new Error("That file isn't valid JSON.");
+  }
+  const items = Array.isArray(data) ? data : data?.todos;
+  if (!Array.isArray(items)) {
+    throw new Error("That file doesn't look like an exported to-do list.");
+  }
+  const todos = items
+    .filter((item) => typeof item?.text === "string" && item.text.trim())
+    .map((item) => ({ ...createTodo(item.text.trim()), done: item.done === true }));
+  if (items.length > 0 && todos.length === 0) {
+    throw new Error("None of the items in that file have any text.");
+  }
+  return todos;
+}

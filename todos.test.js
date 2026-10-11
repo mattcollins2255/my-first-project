@@ -11,6 +11,7 @@ import {
   STARTER_TODOS,
   exportTodos,
   exportFilename,
+  importTodos,
 } from "./todos.js";
 
 test("addTodo adds a trimmed, not-done item", () => {
@@ -96,4 +97,44 @@ test("exportTodos produces readable JSON with text, done, and progress", () => {
 
 test("exportFilename includes the date", () => {
   assert.equal(exportFilename(new Date("2026-10-11T12:00:00Z")), "todo-list-2026-10-11.json");
+});
+
+test("importTodos reads back what exportTodos wrote", () => {
+  let todos = addTodo(addTodo([], "a"), "b");
+  todos = toggleTodo(todos, todos[0].id);
+  const imported = importTodos(exportTodos(todos));
+  assert.deepEqual(
+    imported.map(({ text, done }) => ({ text, done })),
+    [
+      { text: "a", done: true },
+      { text: "b", done: false },
+    ]
+  );
+  assert.ok(imported.every((t) => typeof t.id === "string"));
+});
+
+test("importTodos also accepts a plain array of items", () => {
+  const imported = importTodos('[{"text": "x", "done": false}]');
+  assert.deepEqual(imported.map((t) => t.text), ["x"]);
+});
+
+test("importTodos skips items without text and treats non-true done as false", () => {
+  const imported = importTodos(
+    '{"todos": [{"text": "keep", "done": "yes"}, {"text": "  "}, {"done": true}, null]}'
+  );
+  assert.deepEqual(
+    imported.map(({ text, done }) => ({ text, done })),
+    [{ text: "keep", done: false }]
+  );
+});
+
+test("importTodos accepts an empty list", () => {
+  assert.deepEqual(importTodos('{"todos": []}'), []);
+});
+
+test("importTodos rejects files that aren't exported lists", () => {
+  assert.throws(() => importTodos("not json"), /isn't valid JSON/);
+  assert.throws(() => importTodos('{"hello": "world"}'), /doesn't look like/);
+  assert.throws(() => importTodos("null"), /doesn't look like/);
+  assert.throws(() => importTodos('{"todos": [{"text": ""}]}'), /have any text/);
 });

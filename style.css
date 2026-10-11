@@ -121,7 +121,7 @@ li.done span { text-decoration: line-through; color: var(--muted); }
 .delete { border: none; background: none; color: var(--muted); font-size: 1.3rem; padding: 0 8px; }
 .delete:hover { color: var(--danger); }
 
-footer { display: flex; justify-content: space-between; margin-top: 16px; }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-top: 16px; }
 .link { border: none; background: none; padding: 0; color: var(--muted); font-size: 0.9rem; }
 .link:hover { color: var(--text); text-decoration: underline; }
 

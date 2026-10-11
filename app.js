@@ -9,6 +9,7 @@ import {
   starterTodos,
   exportTodos,
   exportFilename,
+  importTodos,
 } from "./todos.js";
 
 const STORAGE_KEY = "agentic-ai-todos";
@@ -43,6 +44,8 @@ const filterButtons = document.querySelectorAll("[data-filter]");
 const clearButton = document.querySelector("#clear-completed");
 const resetButton = document.querySelector("#reset");
 const exportButton = document.querySelector("#export");
+const importButton = document.querySelector("#import");
+const importFile = document.querySelector("#import-file");
 
 function update(newTodos) {
   todos = newTodos;
@@ -114,6 +117,24 @@ exportButton.addEventListener("click", () => {
   link.download = exportFilename();
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000); // free the memory once the download starts
+});
+
+// The real file picker is a hidden <input type="file">; the visible button just opens it.
+importButton.addEventListener("click", () => importFile.click());
+
+importFile.addEventListener("change", async () => {
+  const file = importFile.files[0];
+  importFile.value = ""; // reset so choosing the same file again still triggers "change"
+  if (!file) return;
+  try {
+    const imported = importTodos(await file.text());
+    const message =
+      `Replace your current list (${todos.length} items) ` +
+      `with the ${imported.length} items from "${file.name}"?`;
+    if (confirm(message)) update(imported);
+  } catch (error) {
+    alert(`Couldn't import "${file.name}". ${error.message}`);
+  }
 });
 
 render();
