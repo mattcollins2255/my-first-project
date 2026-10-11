@@ -1,0 +1,11 @@
+{
+  "name": "agentic-ai-todo",
+  "version": "1.0.0",
+  "description": "A to-do list for learning to code with agentic AI",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  }
+}

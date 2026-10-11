@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Learning Agentic AI</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Learning to Code with Agentic AI</h1>
+      <p class="subtitle">Your checklist. Progress is saved in this browser.</p>
+
+      <div class="progress" aria-hidden="true"><div id="progress-bar"></div></div>
+      <p id="summary" aria-live="polite"></p>
+
+      <form id="new-todo-form">
+        <label for="new-todo" class="visually-hidden">New to-do</label>
+        <input id="new-todo" placeholder="Add something to learn…" autocomplete="off" />
+        <button type="submit">Add</button>
+      </form>
+
+      <div class="filters" role="group" aria-label="Filter">
+        <button data-filter="all">All</button>
+        <button data-filter="active">Active</button>
+        <button data-filter="done">Done</button>
+      </div>
+
+      <ul id="todo-list"></ul>
+
+      <footer>
+        <button id="clear-completed" class="link">Clear completed</button>
+        <button id="reset" class="link">Reset to starter list</button>
+      </footer>
+    </main>
+  </body>
+</html>

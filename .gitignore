@@ -1,0 +1,10 @@
+# Dependencies (none yet, but here if we ever add some)
+node_modules/
+
+# Editor and OS clutter
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
